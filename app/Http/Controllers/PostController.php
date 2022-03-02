@@ -45,12 +45,26 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', compact('post'));
     }
 
     public function update(Request $request, Post $post)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|string|max:155',
+            'content' => 'required',
+            'status' => 'required'
+        ]);
+
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'status' => $request->status,
+            'slug' => Str::slug($request->title)
+        ]);
+
+        return redirect()->route('post.index')
+            ->with('success', 'Post has been updated successfully');
     }
 
     public function destroy(Post $post)
