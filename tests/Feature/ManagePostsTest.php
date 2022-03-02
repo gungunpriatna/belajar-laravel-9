@@ -69,7 +69,43 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function user_can_edit_existing_post()
     {
-        $this->assertTrue(true);
+        // generate 1 record data posts
+        $post = Post::create([
+            'title' => 'Belajar Laravel 9',
+            'content' => 'Ini adalah content tutorial belajar laravel 9',
+            'status' => 0, // draft,
+            'slug' => 'belajar-laravel-9'
+        ]);
+
+        // user buka halaman daftar post
+        $this->visit('post');
+
+        // user clik tombol edit post
+        $this->visit("post/{$post->id}/edit");
+
+        // user lihat url yang dituju sesuai dengan post yang diedit
+        $this->seePageIs("post/{$post->id}/edit");
+
+        // tampil form edit post
+        $this->seeElement('form', [
+            'action' => url('post/' . $post->id)
+        ]);
+
+        // user submit data post yang diupdate
+        $this->submitForm('Update', [
+            'title' => 'Belajar Laravel 9 [edisi revisi]',
+            'status' => 1, // publish
+        ]);
+
+        // check perubahan data di table posts
+        $this->seeInDatabase('posts', [
+            'id' => $post->id,
+            'title' => 'Belajar Laravel 9 [edisi revisi]',
+            'status' => 1, //publish
+        ]);
+
+        // lihat halaman web yang ter-redirect
+        $this->seePageIs('/post');
     }
 
     /** @test  */
