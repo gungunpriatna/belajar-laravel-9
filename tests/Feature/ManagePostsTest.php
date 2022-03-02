@@ -111,6 +111,22 @@ class ManagePostsTest extends TestCase
     /** @test  */
     public function user_can_delete_existing_post()
     {
-        $this->assertTrue(true);
+        // generate 1 post data
+        $post = Post::create([
+            'title' => 'Belajar Laravel 9',
+            'content' => 'Ini adalah tutorial belajar laravel 9',
+            'status' => 1,
+            'slug' => 'belajar-laravel-9'
+        ]);
+
+        // post delete request
+        $this->post('/post/' . $post->id, [
+            '_method' => 'DELETE'
+        ]);
+
+        // check data di table post
+        $this->dontSeeInDatabase('posts', [
+            'id' => $post->id
+        ]);
     }
 }
