@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', \App\Http\Controllers\PostController::class);
+Route::get('/', [\App\Http\Controllers\PostController::class,'index']);
 
 Route::resource('post', \App\Http\Controllers\PostController::class);
