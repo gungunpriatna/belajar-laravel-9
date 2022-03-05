@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\PostController::class,'index']);
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::resource('post', \App\Http\Controllers\PostController::class);
+Route::put('post/{id}/publish', [\App\Http\Controllers\PostController::class, 'publish'])->name('post.publish');
+Route::put('post/{id}/unpublish', [\App\Http\Controllers\PostController::class, 'unpublish'])->name('post.unpublish');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
